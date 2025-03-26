@@ -24,13 +24,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <main className="h-screen flex flex-col justify-center items-center">
+    <html lang="en" className="scroll-smooth">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Navbar is fixed, add padding-top to main content */}
         <Navbar />
-        {children}
+        
+        <main className="min-h-screen pt-16 md:pt-20"> {/* Adjust padding-top based on navbar height */}
+          <div className="flex flex-col items-center justify-center min-h-full">
+            {children}
+          </div>
         </main>
       </body>
     </html>

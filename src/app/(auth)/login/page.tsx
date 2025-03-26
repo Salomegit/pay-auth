@@ -1,8 +1,8 @@
 import React from 'react'
-import LoginForm from '@/components/forms/sign-in-form'
+import LoginForm from '@/components/forms/login-form'
 const page = () => {
   return (
-    <div>
+    <div className=''>
       Login
       <LoginForm/>
       
