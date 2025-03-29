@@ -39,7 +39,6 @@ const RegisterForm = () => {
     <div className="w-full max-w-2xl mx-auto p-4 sm:p-6 md:p-8">
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4 md:space-y-6">
-        <div className="flex flex-col md:flex-row md:gap-6">
           {/* Username Field */}
           <FormField
             control={form.control}
@@ -78,7 +77,7 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-        </div>
+        
 
         {/* Password Fields */}
         <div className="space-y-4 md:space-y-6">
@@ -135,9 +134,12 @@ const RegisterForm = () => {
       </div>
 
       {/* Google Button */}
+      <div className='w-full mt-4 md:mt-6 h-12 md:h-14 text-sm md:text-base'>
+
         <GoogleSignInButton >
            Continue with Google
             </GoogleSignInButton>
+      </div>
 
       {/* Login Link */}
       <p className="text-center text-xs md:text-sm text-gray-600 mt-6 md:mt-8">

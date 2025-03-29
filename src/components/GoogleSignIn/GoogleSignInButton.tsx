@@ -13,7 +13,7 @@ const GoogleSignInButton:FC<GoogleSignInButtonProps> = ({children}) => {
 
   return (
     <div>
-        <Button className="w-full mt-4 sm:mt-6 h-10 sm:h-12 text-sm sm:text-base" onClick={loginWithGoogle}>{children}</Button>
+        <Button   className='w-full mt-4 md:mt-6 h-12 md:h-14 text-sm md:text-base' onClick={loginWithGoogle}>{children}</Button>
     </div>
   )
 }
