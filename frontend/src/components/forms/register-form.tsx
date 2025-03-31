@@ -1,13 +1,13 @@
 "use client";
 import React from 'react'
-import { Form, FormField, FormLabel,  FormMessage, FormItem, FormControl } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Form, FormField, FormLabel,  FormMessage, FormItem, FormControl } from '../ui/form'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link';
-import GoogleSignInButton from '@/components/GoogleSignIn/GoogleSignInButton';
+import GoogleSignInButton from '../GoogleSignIn/GoogleSignInButton';
 
 const FormSchema = z.object({
     username: z.string().min(1,"username is required").max(10),
