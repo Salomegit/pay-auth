@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsNot
 from rest_framework.permissions import BasePermission
 from .user_serializer import UserRegistrationSerializer
 from rest_framework.exceptions import ValidationError
@@ -58,6 +58,64 @@ class BuildAccessTokenCookies(TokenObtainPairView):
 
 
 
+
+
+
+@api_view(['Post'])
+def logout(request):
+    try:
+        res = Response()
+        res.data = {'success':'User is successfully Logged Out'}
+        res.delete_cookie('access_token',path='/', samesite='None')
+        res.delete_cookie('refresh_token',path='/', samesite='None')
+        return res
+    except:
+        return Response({'success':'User is not logged out'})
+
+
+# class IsNotAuthenticated(BasePermission):
+#     def has_permission(self,request,view):
+#         return not request.user.is_authenticated
+
+
+# @api_view(['POST'])
+# @permission_classes([IsNotAuthenticated])
+# def is_not_authenticated(request):
+#     return Response({ "authenticated":'User is not Authenticated' })
+
+class isNotAuthenticated(BasePermission):
+     def has_permission(self, request, view):
+        return not request.user.is_authenticated
+
+@api_view(['POST'])
+@permission_classes([isNotAuthenticated])
+def isnotauthenticated(request):
+    return Response({"unautheticated user"})           
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def is_authenticated(request):
+    if IsAuthenticated:
+
+        return Response({ "authenticated":True })
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def register_user(request):
+    serializer = UserRegistrationSerializer(data=request.data)
+    if serializer.is_valid():
+       user_data =  serializer.save()
+       user_data = {
+           "id":user_data.id,
+           "username":user_data.username,
+           "first_name":user_data.first_name,
+           "email":user_data.email,
+        }
+
+       return  Response( {'authenticated':'user is created'},status=201)
+    
+    return Response(serializer.errors,status=400)
 class CustomRefreshToken(TokenRefreshView):
     def post(self,request,*args,**kwargs):
         try:
@@ -99,53 +157,3 @@ class CustomRefreshToken(TokenRefreshView):
                 {'refreshed': False, 'error': 'An unexpected error occurred'},
                 status=500
             )
-
-
-@api_view(['Post'])
-def logout(request):
-    try:
-        res = Response()
-        res.data = {'success':'User is successfully Logged Out'}
-        res.delete_cookie('access_token',path='/', samesite='None')
-        res.delete_cookie('refresh_token',path='/', samesite='None')
-        return res
-    except:
-        return Response({'success':'User is not logged out'})
-
-
-# class IsNotAuthenticated(BasePermission):
-#     def has_permission(self,request,view):
-#         return not request.user.is_authenticated
-
-
-# @api_view(['POST'])
-# @permission_classes([IsNotAuthenticated])
-# def is_not_authenticated(request):
-#     return Response({ "authenticated":'User is not Authenticated' })
-
-
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def is_authenticated(request):
-    if IsAuthenticated:
-
-        return Response({ "authenticated":True })
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def register_user(request):
-    serializer = UserRegistrationSerializer(data=request.data)
-    if serializer.is_valid():
-       user_data =  serializer.save()
-       user_data = {
-           "id":user_data.id,
-           "username":user_data.username,
-           "first_name":user_data.first_name,
-           "email":user_data.email,
-        }
-
-       return  Response( {'authenticated':'user is created'},status=201)
-    
-    return Response(serializer.errors,status=400)
