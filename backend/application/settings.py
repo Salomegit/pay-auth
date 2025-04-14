@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 
 ]
 
+AUTH_USER_MODEL = 'users_auth.UserDetails'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'users_auth.authenticate.CookiesJWTAuthentication',

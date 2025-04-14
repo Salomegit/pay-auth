@@ -4,9 +4,10 @@ from django.shortcuts import render
 from django.http import HttpRequest,HttpResponse,JsonResponse
 from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 from rest_framework.response import Response
+from rest_framework.exceptions import AuthenticationFailed
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsNot
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.permissions import BasePermission
 from .user_serializer import UserRegistrationSerializer
 from rest_framework.exceptions import ValidationError
@@ -53,6 +54,8 @@ class BuildAccessTokenCookies(TokenObtainPairView):
             
         except KeyError as e:
             return Response({'success': False, 'error': str(e)}, status=400)
+        except AuthenticationFailed as e:
+            return Response({'success': False, 'error':str(e)},status=401)
         except Exception as e:
             return Response({'success': False, 'error': 'Something went wrong'}, status=500)
 
@@ -116,6 +119,7 @@ def register_user(request):
        return  Response( {'authenticated':'user is created'},status=201)
     
     return Response(serializer.errors,status=400)
+
 class CustomRefreshToken(TokenRefreshView):
     def post(self,request,*args,**kwargs):
         try:
@@ -143,7 +147,6 @@ class CustomRefreshToken(TokenRefreshView):
                 path='/'
             )
 
-            print(refresh_token)
             return res
 
 
